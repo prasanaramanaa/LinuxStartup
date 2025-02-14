@@ -13,36 +13,41 @@ apt-get install -y curl wget git python3 python3-pip
 # -----------------------------
 echo "Installing Tailscale..."
 curl -fsSL https://tailscale.com/install.sh | sh
-# After installation, you must start and authenticate Tailscale:
 echo "To start Tailscale, run:"
-echo "  sudo tailscale up --authkey <YOUR_AUTH_KEY>"
-# For more details, see the official Tailscale install guide. :contentReference[oaicite:0]{index=0}
+echo "  sudo tailscale up --authkey <YOUR_AUTH_KEY>  --advertise-exit-node --advertise-routes=192.168.x.0/24 --reset
+"
 
 # -----------------------------
-# Install FileBrowser
+# Install FileBrowser (web-based file manager)
 # -----------------------------
-echo "Installing FileBrowser (web-based file manager)..."
+echo "Installing FileBrowser..."
 curl -fsSL https://raw.githubusercontent.com/filebrowser/get/master/get.sh | bash
-# Once installed, you can start FileBrowser by running, for example:
 echo "To start FileBrowser, run:"
 echo "  filebrowser -r / -p 8080"
-# This command will serve the root directory on port 8080.
-# For more details, check out FileBrowser’s documentation. :contentReference[oaicite:1]{index=1}
 
 # -----------------------------
-# Install Kohya-ss (Stable Diffusion scripts)
+# Download and setup hfd.sh script
 # -----------------------------
-echo "Cloning the kohya-ss repository..."
-git clone https://github.com/kohya-ss/sd-scripts.git ~/kohya-ss
-cd ~/kohya-ss
+echo "Downloading hfd.sh script..."
+wget -O hfd.sh https://gist.githubusercontent.com/CCCarloooo/5a568cc3493532807fe01b9819b9977f/raw/1c7c6d5d7fecb99196f2d3beb34deb24d6530cbf/hfd.sh
+echo "Making hfd.sh executable..."
+chmod a+x hfd.sh
+echo "Setting alias 'hfd' for the current session..."
+alias hfd="$PWD/hfd.sh"
+echo "To make the alias permanent, add the following line to your shell configuration (e.g. ~/.bashrc):"
+echo "alias hfd=\"$PWD/hfd.sh\""
 
-echo "Installing Python dependencies for kohya-ss..."
-pip3 install -r requirements.txt
-# Refer to the repository's README for further usage instructions.
-# Repository: https://github.com/kohya-ss/sd-scripts :contentReference[oaicite:2]{index=2}
+# -----------------------------
+# Install Kohya-ss (Kohya's GUI) from sd3-flux.1 branch
+# -----------------------------
+echo "Cloning Kohya-ss (sd3-flux.1 branch)..."
+git clone -b sd3-flux.1 https://github.com/bmaltais/kohya_ss.git ~/kohya_ss
+cd ~/kohya_ss
+echo "Running Kohya-ss setup script (this may take a few minutes)..."
+./setup.sh
+cd -
+echo "Kohya-ss installation complete!"
+echo "To run Kohya-ss GUI, navigate to ~/kohya_ss and execute:"
+echo "  ./gui.sh"
 
-echo "Installation complete!"
-echo "Next steps:"
-echo "1. For Tailscale: Run 'sudo tailscale up --authkey <YOUR_AUTH_KEY>' to authenticate."
-echo "2. For FileBrowser: Run 'filebrowser -r / -p 8080' to launch the web file manager."
-echo "3. For kohya-ss: Check out the README in ~/kohya-ss for instructions on running the scripts."
+echo "All installations complete! Enjoy your development environment."
