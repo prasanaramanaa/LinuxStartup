@@ -6,7 +6,7 @@ echo "Updating system packages..."
 apt-get update && apt-get upgrade -y
 
 echo "Installing essential packages (curl, wget, git, python3, python3-pip)..."
-apt-get install -y curl wget git python3 python3-pip
+apt-get install -y curl wget git python3 python3-pip python3.10-venv python3-tk
 
 # -----------------------------
 # Install Tailscale
