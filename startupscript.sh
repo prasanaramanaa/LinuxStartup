@@ -6,7 +6,7 @@ echo "Updating system packages..."
 apt-get update && apt-get upgrade -y
 
 echo "Installing essential packages (curl, wget, git, python3, python3-pip)..."
-apt-get install -y curl wget git python3 python3-pip python3.10-venv python3-tk
+apt-get install -y curl wget git python3 python3-pip python3.10-venv python3-tk git git-lfs
 
 # -----------------------------
 # Install Tailscale
@@ -26,16 +26,24 @@ echo "To start FileBrowser, run:"
 echo "  filebrowser -r / -p 8080"
 
 # -----------------------------
-# Download and setup hfd.sh script
+# Download and setup hfd.sh script permanently
 # -----------------------------
 echo "Downloading hfd.sh script..."
 wget -O hfd.sh https://gist.githubusercontent.com/CCCarloooo/5a568cc3493532807fe01b9819b9977f/raw/1c7c6d5d7fecb99196f2d3beb34deb24d6530cbf/hfd.sh
 echo "Making hfd.sh executable..."
 chmod a+x hfd.sh
-echo "Setting alias 'hfd' for the current session..."
-alias hfd="$PWD/hfd.sh"
-echo "To make the alias permanent, add the following line to your shell configuration (e.g. ~/.bashrc):"
-echo "alias hfd=\"$PWD/hfd.sh\""
+
+# Create a permanent directory for hfd.sh and move it there.
+sudo mkdir -p /opt/hfd
+sudo mv hfd.sh /opt/hfd/hfd.sh
+sudo chmod a+x /opt/hfd/hfd.sh
+
+# Add a permanent alias to ~/.bashrc so that 'hfd' is always available.
+echo "Adding permanent alias 'hfd' to ~/.bashrc..."
+echo "alias hfd='/opt/hfd/hfd.sh'" >> ~/.bashrc
+source ~/.bashrc
+
+echo "Alias 'hfd' has been set permanently. You can now run 'hfd' from any terminal."
 
 # -----------------------------
 # Install Kohya-ss (Kohya's GUI) from sd3-flux.1 branch
